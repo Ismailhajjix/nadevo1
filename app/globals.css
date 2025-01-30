@@ -1,0 +1,88 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --background: 157, 95%, 69%;
+  --foreground: 60, 98%, 11%;
+  --card: 0, 0%, 100%;
+  --card-foreground: 60, 98%, 11%;
+  --popover: 0, 0%, 100%;
+  --popover-foreground: 60, 98%, 11%;
+  --primary: 157, 95%, 69%;
+  --primary-foreground: 60, 98%, 11%;
+  --secondary: 60, 98%, 11%;
+  --secondary-foreground: 157, 95%, 69%;
+  --muted: 60, 98%, 96%;
+  --muted-foreground: 60, 98%, 11%;
+  --accent: 157, 95%, 69%;
+  --accent-foreground: 60, 98%, 11%;
+  --destructive: 0, 84%, 60%;
+  --destructive-foreground: 60, 98%, 11%;
+  --border: 60, 98%, 11%;
+  --input: 60, 98%, 11%;
+  --ring: 157, 95%, 69%;
+  --radius: 0.5rem;
+}
+
+.dark {
+  --background: 60, 98%, 11%;
+  --foreground: 157, 95%, 69%;
+  --card: 60, 98%, 11%;
+  --card-foreground: 157, 95%, 69%;
+  --popover: 60, 98%, 11%;
+  --popover-foreground: 157, 95%, 69%;
+  --primary: 157, 95%, 69%;
+  --primary-foreground: 60, 98%, 11%;
+  --secondary: 60, 98%, 11%;
+  --secondary-foreground: 157, 95%, 69%;
+  --muted: 60, 98%, 15%;
+  --muted-foreground: 157, 95%, 69%;
+  --accent: 60, 98%, 11%;
+  --accent-foreground: 157, 95%, 69%;
+  --destructive: 0, 84%, 60%;
+  --destructive-foreground: 157, 95%, 69%;
+  --border: 157, 95%, 69%;
+  --input: 157, 95%, 69%;
+  --ring: 157, 95%, 69%;
+}
+
+body {
+  @apply bg-background text-foreground;
+}
+
+@layer utilities {
+  .text-balance {
+    text-wrap: balance;
+  }
+}
+
+/* Custom Animations */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes slideUp {
+  from {
+    transform: translateY(20px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+.animate-fadeIn {
+  animation: fadeIn 0.5s ease-out;
+}
+
+.animate-slideUp {
+  animation: slideUp 0.5s ease-out;
+}
+
