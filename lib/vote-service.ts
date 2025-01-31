@@ -97,11 +97,11 @@ export class VoteService {
         this.getIpAddress()
       ]);
 
-      // 3. Check for existing verification by fingerprint or IP
+      // 3. Check for existing verification by fingerprint
       const { data: existingVerification, error: verificationCheckError } = await supabase
         .from('voter_verifications')
         .select('id')
-        .or(`browser_fingerprint.eq.${fingerprint},ip_address.eq.${ipAddress}`)
+        .eq('browser_fingerprint', fingerprint)
         .maybeSingle();
 
       if (verificationCheckError) {
@@ -132,7 +132,7 @@ export class VoteService {
 
       const { data: verification, error: verificationError } = await supabase
         .from('voter_verifications')
-        .insert(verificationData)
+        .insert([verificationData])
         .select()
         .single();
 
@@ -163,7 +163,7 @@ export class VoteService {
 
       const { error: voteError } = await supabase
         .from('votes')
-        .insert(voteData);
+        .insert([voteData]);
 
       if (voteError) {
         console.error('Error submitting vote:', voteError);
@@ -175,9 +175,10 @@ export class VoteService {
       }
 
       // 6. Update participant's vote count
-      const { error: updateError } = await supabase.rpc('increment_vote_count', {
-        participant_id: request.participantId
-      });
+      const { error: updateError } = await supabase
+        .from('participants')
+        .update({ votes_count: supabase.rpc('increment') })
+        .eq('id', request.participantId);
 
       if (updateError) {
         console.error('Error updating vote count:', updateError);
