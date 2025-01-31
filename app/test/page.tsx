@@ -32,6 +32,16 @@ export default function TestPage() {
           key: Boolean(process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY)
         };
 
+        // If Supabase client is null (development/build time)
+        if (!supabase) {
+          setStatus({
+            isConnected: false,
+            error: 'Supabase client not initialized (development mode)',
+            envVars: envStatus
+          });
+          return;
+        }
+
         // Test connection by making a simple query
         const { data, error } = await supabase
           .from('votes')
