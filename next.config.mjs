@@ -14,7 +14,7 @@ const nextConfig = {
     ignoreBuildErrors: true,
   },
   images: {
-    unoptimized: false,
+    unoptimized: true,
     domains: ['localhost'],
     remotePatterns: [
       {
@@ -28,8 +28,12 @@ const nextConfig = {
     ],
   },
   experimental: {
-    webpackBuildWorker: true
-  }
+    webpackBuildWorker: false
+  },
+  output: 'standalone',
+  poweredByHeader: false,
+  reactStrictMode: true,
+  swcMinify: true
 }
 
 mergeConfig(nextConfig, userConfig)
