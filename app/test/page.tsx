@@ -11,6 +11,11 @@ export default function TestPage() {
   useEffect(() => {
     async function fetchData() {
       try {
+        // Check if environment variables are available
+        if (!process.env.NEXT_PUBLIC_SUPABASE_URL || !process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY) {
+          throw new Error('Supabase environment variables are not configured')
+        }
+
         const { data: result, error: queryError } = await supabase
           .from('votes')
           .select('count')
@@ -19,6 +24,7 @@ export default function TestPage() {
         if (queryError) throw queryError
         setData(result)
       } catch (err) {
+        console.error('Error:', err)
         setError(err)
       } finally {
         setLoading(false)
@@ -42,7 +48,7 @@ export default function TestPage() {
       {error ? (
         <div className="text-red-500">
           <p>Connection Error:</p>
-          <pre>{JSON.stringify(error, null, 2)}</pre>
+          <pre>{error instanceof Error ? error.message : JSON.stringify(error, null, 2)}</pre>
         </div>
       ) : (
         <div className="text-green-500">

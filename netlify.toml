@@ -7,6 +7,8 @@
   NODE_VERSION = "20.11.0"
   NPM_FLAGS = "--legacy-peer-deps"
   NEXT_TELEMETRY_DISABLED = "1"
+  NEXT_PUBLIC_SUPABASE_URL = "https://kuihgcfcpfllnrxtnovv.supabase.co"
+  NEXT_PUBLIC_SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imt1aWhnY2ZjcGZsbG5yeHRub3Z2Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3MzgyOTc3NDksImV4cCI6MjA1Mzg3Mzc0OX0.l7N7riqqdc7hFRyolzsrJ2Q2JzQhUUR-jlOdi4PYtz8"
 
 [[plugins]]
   package = "@netlify/plugin-nextjs"
