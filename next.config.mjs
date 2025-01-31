@@ -30,9 +30,11 @@ const nextConfig = {
   experimental: {
     webpackBuildWorker: false
   },
-  output: 'standalone',
+  output: 'export',
+  distDir: '.next',
   poweredByHeader: false,
-  reactStrictMode: true
+  reactStrictMode: true,
+  trailingSlash: true
 }
 
 mergeConfig(nextConfig, userConfig)
