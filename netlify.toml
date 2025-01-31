@@ -28,11 +28,6 @@
 [[plugins]]
   package = "@netlify/plugin-nextjs"
 
-[plugins.inputs]
-  enable_cache = true
-  cache_build = true
-  cache_dependencies = true
-
 [[headers]]
   for = "/*"
   [headers.values]
