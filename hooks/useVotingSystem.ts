@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react"
 import type { Person } from "../types/vote"
-import { supabase } from "@/utils/supabase"
+import { supabase } from "@/lib/supabase"
 
 // Generate a unique user ID if not exists
 const getUserId = () => {
