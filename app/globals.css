@@ -1,70 +1,97 @@
+/* Import Google Fonts first */
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+Arabic:wght@100;200;300;400;500;600;700;800;900&display=swap');
+
+/* Then Tailwind imports */
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
+/* Custom CSS variables */
 :root {
-  --background: 157, 95%, 69%;
-  --foreground: 60, 98%, 11%;
-  --card: 0, 0%, 100%;
-  --card-foreground: 60, 98%, 11%;
-  --popover: 0, 0%, 100%;
-  --popover-foreground: 60, 98%, 11%;
-  --primary: 157, 95%, 69%;
-  --primary-foreground: 60, 98%, 11%;
-  --secondary: 60, 98%, 11%;
-  --secondary-foreground: 157, 95%, 69%;
-  --muted: 60, 98%, 96%;
-  --muted-foreground: 60, 98%, 11%;
-  --accent: 157, 95%, 69%;
-  --accent-foreground: 60, 98%, 11%;
-  --destructive: 0, 84%, 60%;
-  --destructive-foreground: 60, 98%, 11%;
-  --border: 60, 98%, 11%;
-  --input: 60, 98%, 11%;
-  --ring: 157, 95%, 69%;
-  --radius: 0.5rem;
+  --font-arabic: 'Noto Sans Arabic', sans-serif;
 }
 
-.dark {
-  --background: 60, 98%, 11%;
-  --foreground: 157, 95%, 69%;
-  --card: 60, 98%, 11%;
-  --card-foreground: 157, 95%, 69%;
-  --popover: 60, 98%, 11%;
-  --popover-foreground: 157, 95%, 69%;
-  --primary: 157, 95%, 69%;
-  --primary-foreground: 60, 98%, 11%;
-  --secondary: 60, 98%, 11%;
-  --secondary-foreground: 157, 95%, 69%;
-  --muted: 60, 98%, 15%;
-  --muted-foreground: 157, 95%, 69%;
-  --accent: 60, 98%, 11%;
-  --accent-foreground: 157, 95%, 69%;
-  --destructive: 0, 84%, 60%;
-  --destructive-foreground: 157, 95%, 69%;
-  --border: 157, 95%, 69%;
-  --input: 157, 95%, 69%;
-  --ring: 157, 95%, 69%;
-}
-
-body {
-  @apply bg-background text-foreground;
-}
-
-@layer utilities {
-  .text-balance {
-    text-wrap: balance;
+/* Base styles */
+@layer base {
+  html {
+    font-family: var(--font-arabic);
   }
+  
+  body {
+    direction: rtl;
+  }
+}
+
+/* Custom utilities */
+@layer utilities {
+  .font-arabic {
+    font-family: var(--font-arabic);
+  }
+}
+
+@layer base {
+  :root {
+    --background: 222.2 84% 4.9%;
+    --foreground: 210 40% 98%;
+    --card: 222.2 84% 4.9%;
+    --card-foreground: 210 40% 98%;
+    --popover: 222.2 84% 4.9%;
+    --popover-foreground: 210 40% 98%;
+    --primary: 157 95% 69%;
+    --primary-foreground: 222.2 47.4% 11.2%;
+    --secondary: 217.2 32.6% 17.5%;
+    --secondary-foreground: 210 40% 98%;
+    --muted: 217.2 32.6% 17.5%;
+    --muted-foreground: 215 20.2% 65.1%;
+    --accent: 217.2 32.6% 17.5%;
+    --accent-foreground: 210 40% 98%;
+    --destructive: 0 62.8% 30.6%;
+    --destructive-foreground: 210 40% 98%;
+    --border: 217.2 32.6% 17.5%;
+    --input: 217.2 32.6% 17.5%;
+    --ring: 224.3 76.3% 48%;
+    --radius: 0.5rem;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+  
+  html,
+  body {
+    @apply bg-[#0a0f1c] text-foreground antialiased;
+    min-height: 100vh;
+    width: 100%;
+    overflow-x: hidden;
+  }
+}
+
+/* Animations */
+@keyframes blob {
+  0% { transform: translate(0px, 0px) scale(1); }
+  33% { transform: translate(30px, -50px) scale(1.1); }
+  66% { transform: translate(-20px, 20px) scale(0.9); }
+  100% { transform: translate(0px, 0px) scale(1); }
+}
+
+.animate-blob {
+  animation: blob 7s infinite;
+}
+
+.animation-delay-2000 {
+  animation-delay: 2s;
+}
+
+.animation-delay-4000 {
+  animation-delay: 4s;
 }
 
 /* Custom Animations */
 @keyframes fadeIn {
-  from {
-    opacity: 0;
-  }
-  to {
-    opacity: 1;
-  }
+  from { opacity: 0; }
+  to { opacity: 1; }
 }
 
 @keyframes slideUp {
@@ -84,5 +111,73 @@ body {
 
 .animate-slideUp {
   animation: slideUp 0.5s ease-out;
+}
+
+/* Container */
+.container {
+  width: 100%;
+  max-width: 1280px;
+  margin-left: auto;
+  margin-right: auto;
+  padding-left: 1rem;
+  padding-right: 1rem;
+}
+
+/* Grid */
+.grid {
+  display: grid;
+  width: 100%;
+}
+
+.grid-cols-1 { grid-template-columns: repeat(1, minmax(0, 1fr)); }
+.grid-cols-2 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+.grid-cols-3 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+.grid-cols-4 { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+
+@media (min-width: 640px) {
+  .sm\:grid-cols-2 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+
+@media (min-width: 768px) {
+  .md\:grid-cols-3 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+}
+
+@media (min-width: 1024px) {
+  .lg\:grid-cols-4 { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+}
+
+/* Grid background */
+.bg-grid-white {
+  background-size: 50px 50px;
+  background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.05'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+}
+
+/* Aspect ratio */
+.aspect-square {
+  position: relative;
+  padding-bottom: 100%;
+}
+
+.aspect-square > * {
+  position: absolute;
+  height: 100%;
+  width: 100%;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+}
+
+/* Additional utility classes */
+.bg-gradient-radial {
+  background: radial-gradient(circle at center, var(--tw-gradient-stops));
+}
+
+.mix-blend-multiply {
+  mix-blend-mode: multiply;
+}
+
+.filter-blur-xl {
+  filter: blur(24px);
 }
 

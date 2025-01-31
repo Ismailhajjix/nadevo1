@@ -1,87 +1,124 @@
 "use client"
 
-import { motion } from "../utils/motion"
-import type { Person } from '../types/vote'
-import { PremiumCard } from './ui/PremiumCard'
-import { PremiumButton } from './ui/PremiumButton'
-import { TrendingUp } from 'lucide-react'
+import { useState } from 'react'
+import { motion, AnimatePresence } from "framer-motion"
+import { Heart, Loader2 } from 'lucide-react'
 import Image from 'next/image'
-import { ClientOnly } from './ClientOnly'
+import { VoteService } from '@/lib/vote-service'
+import { cn } from '@/lib/utils'
 
-type PersonCardProps = {
-  person: Person
-  isVoted: boolean
-  onVote: (id: string) => void
-  loading?: boolean
-  totalVotes: number
+interface PersonCardProps {
+  id: string;
+  name: string;
+  title: string;
+  imageUrl: string;
+  votes: number;
+  className?: string;
 }
 
-export function PersonCard({ person, isVoted, onVote, loading, totalVotes }: PersonCardProps) {
-  // Calculate percentage
-  const percentage = totalVotes > 0 
-    ? ((person.votes / totalVotes) * 100).toFixed(1)
-    : '0.0'
+export default function PersonCard({ id, name, title, imageUrl, votes, className }: PersonCardProps) {
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+  const [success, setSuccess] = useState(false);
+
+  const handleVote = async () => {
+    setIsLoading(true);
+    setError(null);
+
+    try {
+      // Generate a temporary voter profile ID
+      const tempVoterProfileId = `temp_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
+      
+      const voteResponse = await VoteService.submitVote({
+        participantId: id,
+        voterProfileId: tempVoterProfileId
+      });
+
+      if (!voteResponse.success) {
+        throw new Error(voteResponse.message);
+      }
+
+      setSuccess(true);
+      
+      // Reset success message after 3 seconds
+      setTimeout(() => {
+        setSuccess(false);
+      }, 3000);
+
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'حدث خطأ غير متوقع');
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
   return (
-    <PremiumCard>
-      <div className="relative overflow-hidden group">
-        <motion.div
-          whileHover={{ scale: 1.05 }}
-          className="relative aspect-square mb-4 rounded-lg overflow-hidden bg-gray-100 dark:bg-gray-800"
-        >
+    <div className={cn(
+      "relative bg-gray-800/50 rounded-xl overflow-hidden backdrop-blur-sm border border-white/10",
+      className
+    )}>
+      {/* Image and content */}
+      <div className="p-4">
+        <div className="relative w-full aspect-square rounded-lg overflow-hidden mb-4">
           <Image
-            src={person.image}
-            alt={person.name}
+            src={imageUrl}
+            alt={name}
             fill
-            className="object-cover transition-transform duration-300 group-hover:scale-110"
-            sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-            priority
+            className="object-cover"
           />
-          <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-        </motion.div>
-
-        <div className="space-y-4">
-          <motion.h3 
-            className="text-xl font-bold bg-gradient-to-r from-primary to-primary-light bg-clip-text text-transparent"
-          >
-            {person.name}
-          </motion.h3>
-
-          <div className="flex items-center justify-between">
-            <motion.div
-              initial={{ opacity: 0, x: -20 }}
-              animate={{ opacity: 1, x: 0 }}
-              className="flex items-center gap-2"
-            >
-              <span className="text-2xl font-bold text-primary-light">
-                {person.votes}
-              </span>
-              <div className="flex flex-col">
-                <span className="text-sm text-gray-400">صوت</span>
-                <span className="text-xs text-gray-500">
-                  ({percentage}%)
-                </span>
-              </div>
-            </motion.div>
-
-            <ClientOnly>
-              <PremiumButton
-                onClick={() => onVote(person.id)}
-                disabled={isVoted || loading}
-                className={isVoted ? 'bg-accent hover:bg-accent-hover' : undefined}
-              >
-                <span className="relative z-10 flex items-center gap-2">
-                  {loading ? 'جاري التصويت' : isVoted ? 'تم التصويت' : 'صوت الآن'}
-                  {!isVoted && !loading && (
-                    <TrendingUp className="w-4 h-4 group-hover:translate-y-[-2px] transition-transform" />
-                  )}
-                </span>
-              </PremiumButton>
-            </ClientOnly>
-          </div>
         </div>
+        <div className="text-center">
+          <h3 className="text-lg font-bold text-white mb-1 font-arabic">{name}</h3>
+          <p className="text-gray-400 text-sm font-arabic">{title}</p>
+        </div>
+
+        {/* Vote button */}
+        <div className="mt-4">
+          <motion.button
+            onClick={handleVote}
+            whileHover={{ scale: 1.02 }}
+            whileTap={{ scale: 0.98 }}
+            disabled={isLoading}
+            className="w-full py-2 bg-primary/20 hover:bg-primary/30 rounded-lg
+                     text-primary font-arabic flex items-center justify-center gap-2
+                     disabled:opacity-50 disabled:cursor-not-allowed"
+          >
+            {isLoading ? (
+              <Loader2 className="w-5 h-5 animate-spin" />
+            ) : (
+              <>
+                <Heart className="w-5 h-5" />
+                <span>صوت الآن</span>
+              </>
+            )}
+          </motion.button>
+        </div>
+
+        {/* Messages */}
+        <AnimatePresence mode="wait">
+          {error && (
+            <motion.p
+              initial={{ opacity: 0, y: -10 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: 10 }}
+              className="mt-2 text-red-400 text-sm text-center font-arabic"
+            >
+              {error}
+            </motion.p>
+          )}
+          {success && (
+            <motion.p
+              initial={{ opacity: 0, y: -10 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: 10 }}
+              className="mt-2 text-green-400 text-sm text-center font-arabic"
+            >
+              تم تسجيل تصويتك بنجاح!
+            </motion.p>
+          )}
+        </AnimatePresence>
       </div>
-    </PremiumCard>
+    </div>
   )
 }
 

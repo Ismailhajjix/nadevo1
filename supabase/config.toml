@@ -1,0 +1,25 @@
+# This is your Supabase configuration file
+
+[auth]
+# Disable rate limiting for auth endpoints
+rate_limit_requests = 0
+rate_limit_time = "0s"
+
+[auth.email]
+# Disable email confirmations
+enable_confirmations = false
+
+[auth.external]
+# Disable rate limiting for external auth
+rate_limit_requests = 0
+rate_limit_time = "0s"
+
+[api]
+# Disable rate limiting for API endpoints
+rate_limit_requests = 0
+rate_limit_time = "0s"
+
+[db]
+# Disable connection pooling limits
+pool_mode = 'transaction'
+max_connections = 100 
